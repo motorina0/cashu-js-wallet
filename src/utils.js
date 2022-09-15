@@ -6,6 +6,3 @@ function splitAmount(value) {
     }
     return chunks
 }
-
-const s = splitAmount(13)
-console.log('### s', s)

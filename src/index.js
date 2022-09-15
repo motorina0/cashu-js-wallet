@@ -35,6 +35,7 @@ async function mint(amounts, paymentHash) {
     for (let i = 0; i < amounts.length; i++) {
         secret = secp256k1.utils.randomBytes(32)
         secrets.push(secret)
+        // B_, r = b_dhke.step1_bob(secret)
     }
 }
 

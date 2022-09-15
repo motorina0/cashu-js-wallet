@@ -12,9 +12,29 @@ async function hashToCurve(secretMessage) {
             secretMessage = utils.bytesToHex(msg)
         }
     }
-
-
+    return point
 }
+
+// def step1_bob(secret_msg):
+//     secret_msg = secret_msg.encode("utf-8")
+//     Y = hash_to_curve(secret_msg)
+//     r, _ = gen_keypair(secp256k1)
+//     B_ = Y + r * G
+//     return B_, r
+
+async function step1Bob(secretMessage){
+    const Y = await hashToCurve(secretMessage)
+    // const r = utils.randomPrivateKey()
+    const r = 45943522662364088070039098753115489133214579494806043666244039063376092883740n
+    console.log('### r', r)
+    const P = Point.fromPrivateKey(r)
+    console.log('### P', P)
+    const B_ = Y.add(P)
+    console.log('### B_', B_)
+    return B_
+}
+
+
 
 function bytesToNumber(bytes) {
     return hexToNumber(utils.bytesToHex(bytes));
@@ -29,20 +49,9 @@ function hexToNumber(hex) {
 
 
 
-hashToCurve('153585347535207259782735016770645039724')
+async function test() {
+    const p = await step1Bob('153585347535207259782735016770645039724')
+    console.log('### p', p)
+}
 
-// def hash_to_curve(secret_msg):
-//     """Generates x coordinate from the message hash and checks if the point lies on the curve.
-//     If it does not, it tries computing again a new x coordinate from the hash of the coordinate."""
-//     point = None
-//     msg = secret_msg
-//     while point is None:
-//         x_coord = int(hashlib.sha256(msg).hexdigest().encode("utf-8"), 16)
-//         y_coord = secp256k1.compute_y(x_coord)
-//         try:
-//             # Fails if the point is not on the curve
-//             point = Point(x_coord, y_coord, secp256k1)
-//         except:
-//             msg = str(x_coord).encode("utf-8")
-
-//     return point
+test()
