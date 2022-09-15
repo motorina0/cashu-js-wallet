@@ -1,0 +1,26 @@
+{
+  "name": "cashu-js-wallet",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/motorina0/cashu-js-wallet.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/motorina0/cashu-js-wallet/issues"
+  },
+  "homepage": "https://github.com/motorina0/cashu-js-wallet#readme",
+  "dependencies": {
+    "@noble/secp256k1": "^1.7.0",
+    "axios": "^0.27.2"
+  }
+}
