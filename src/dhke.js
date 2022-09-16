@@ -25,9 +25,9 @@ async function hashToCurve(secretMessage) {
 async function step1Bob(secretMessage){
     const Y = await hashToCurve(secretMessage)
     // const r = utils.randomPrivateKey()
-    const r = 45943522662364088070039098753115489133214579494806043666244039063376092883740n
-    console.log('### r', r)
-    const P = Point.fromPrivateKey(r)
+    const randomBlindingFactor = 45943522662364088070039098753115489133214579494806043666244039063376092883740n
+    console.log('### r', randomBlindingFactor)
+    const P = Point.fromPrivateKey(randomBlindingFactor)
     console.log('### P', P)
     const B_ = Y.add(P)
     console.log('### B_', B_)
