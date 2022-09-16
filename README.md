@@ -27,7 +27,7 @@ return A                                // all clients can see this
     return C'
 ```
 
-### Client (Bob)
+### 4. Client (Bob)
 - stores this data. It represents eCash tokens
 - it proves the invoice was paid
 - if lost or stollen the tokens cannot be accessed anymore
@@ -38,17 +38,17 @@ return A                                // all clients can see this
       = a*Y                             // proves that the `Mint` has "signed"
 ```
 
-### Client (Bob)
+### 5. Client (Bob)
  - makes a payment to another `Mint` Client (Carol) by sharing this data somehow: 
 
 ```
    return (C, secretMessage)
 ```
 
-### Client (Carol)
+### 6. Client (Carol)
  - redeems the funds by sending `(C, secretMessage)` to the `Mint`
 
-### Mint (Alice)
+### 7. Mint (Alice)
   - checks if the redeem data is valid (it was signed by the `Mint`)
 
 ```
@@ -56,5 +56,5 @@ return A                                // all clients can see this
     if (C == a*Y) return true
 ```
 
-### Client (Carol)
+### 8. Client (Carol)
  - has ownership of the tokens now
