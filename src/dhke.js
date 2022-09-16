@@ -1,4 +1,5 @@
 const { utils, Point } = require('@noble/secp256k1')
+const { bytesToNumber } = require('./utils')
 
 async function hashToCurve(secretMessage) {
     let point
@@ -22,7 +23,7 @@ async function hashToCurve(secretMessage) {
 //     B_ = Y + r * G
 //     return B_, r
 
-async function step1Bob(secretMessage){
+async function step1Bob(secretMessage) {
     const Y = await hashToCurve(secretMessage)
     // const r = utils.randomPrivateKey()
     const randomBlindingFactor = 45943522662364088070039098753115489133214579494806043666244039063376092883740n
@@ -31,21 +32,12 @@ async function step1Bob(secretMessage){
     console.log('### P', P)
     const B_ = Y.add(P)
     console.log('### B_', B_)
-    return B_
+    return { B_, randomBlindingFactor }
 }
 
 
 
-function bytesToNumber(bytes) {
-    return hexToNumber(utils.bytesToHex(bytes));
-}
 
-function hexToNumber(hex) {
-    if (typeof hex !== 'string') {
-        throw new TypeError('hexToNumber: expected string, got ' + typeof hex);
-    }
-    return BigInt(`0x${hex}`);
-}
 
 
 
@@ -54,4 +46,8 @@ async function test() {
     console.log('### p', p)
 }
 
-test()
+// test()
+
+module.exports = {
+    step1Bob
+}
