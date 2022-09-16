@@ -1,3 +1,5 @@
+const { utils } = require('@noble/secp256k1')
+
 function splitAmount(value) {
     const chunks = []
     for (let i = 0; i < 32; i++) {

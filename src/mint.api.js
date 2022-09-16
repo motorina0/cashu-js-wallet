@@ -18,6 +18,11 @@ const mintApi = {
             })
         return data
     },
+
+    getKeys: async function () {
+        const { data } = await axios.get(`${MINT_SERVER}/keys`)
+        return data
+    }
 }
 
 module.exports = mintApi
