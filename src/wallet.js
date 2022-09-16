@@ -1,4 +1,4 @@
-const secp256k1 = require('@noble/secp256k1')
+const { utils, Point } = require('@noble/secp256k1')
 const mintApi = require('./mint.api')
 const dhke = require('./dhke')
 const { splitAmount, bytesToNumber, bigIntStringify } = require('./utils')
@@ -6,11 +6,6 @@ const { splitAmount, bytesToNumber, bigIntStringify } = require('./utils')
 class Wallet {
     constructor(keys) {
         this.keys = keys
-    }
-
-    async requestMint(amount) {
-        const invoice = await mintApi.requestMint(amount);
-        return invoice
     }
 
     async mint(amount, hash) {
@@ -30,7 +25,11 @@ class Wallet {
             console.log("Failed to execute 'mint' command")
             console.error(error)
         }
+    }
 
+    async requestMint(amount) {
+        const invoice = await mintApi.requestMint(amount);
+        return invoice
     }
 
     async requestTokens(amounts, paymentHash) {
@@ -38,8 +37,7 @@ class Wallet {
         const secrets = []
         const randomBlindingFactors = []
         for (let i = 0; i < amounts.length; i++) {
-            const rb = secp256k1.utils.randomBytes(32)
-            const secret = bytesToNumber(rb) + ''
+            const secret = bytesToNumber(utils.randomBytes(32)) + ''
             secrets.push(secret)
             const { B_, randomBlindingFactor } = await dhke.step1Bob(secret)
             randomBlindingFactors.push(randomBlindingFactor)
@@ -55,9 +53,9 @@ class Wallet {
 
     _constructProofs(promises, randomBlindingFactors, secrets) {
         return promises.map((p, i) => {
-            const C_ = new secp256k1.Point(BigInt(p["C'"].x), BigInt(p["C'"].y))
+            const C_ = new Point(BigInt(p["C'"].x), BigInt(p["C'"].y))
             const A = this.keys[p.amount]
-            const C = dhke.step3Bob(C_, randomBlindingFactors[i], new secp256k1.Point(BigInt(A.x), BigInt(A.y)))
+            const C = dhke.step3Bob(C_, randomBlindingFactors[i], new Point(BigInt(A.x), BigInt(A.y)))
             return {
                 amount: p.amount,
                 C: { x: C.x, y: C.y, secret: secrets[i] }
