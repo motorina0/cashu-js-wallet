@@ -50,6 +50,7 @@ return A                                // all clients can see this
 
 ### 7. Mint (Alice)
   - checks if the redeem data is valid (it was signed by the `Mint`)
+  - if true, it releases the funds to `Carol`
 
 ```
     Y = hashToCurve(secretMessage)
