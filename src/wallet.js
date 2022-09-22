@@ -33,18 +33,18 @@ class Wallet {
     }
 
     async requestTokens(amounts, paymentHash) {
-        const payloads = []
+        const payloads = {blinded_messages : []}
         const secrets = []
         const randomBlindingFactors = []
         for (let i = 0; i < amounts.length; i++) {
             const secret = bytesToNumber(utils.randomBytes(32)) + ''
             secrets.push(secret)
-            const { B_, randomBlindingFactor } = await dhke.step1Bob(secret)
+            const { B_, randomBlindingFactor } = await dhke.step1Bob(secret).toHex()
             randomBlindingFactors.push(randomBlindingFactor)
-            payloads.push({ amount: amounts[i], B_: { x: B_.x, y: B_.y } })
+            payloads.blinded_messages.push({ amount: amounts[i], B_: B_ })
         }
         const payloadsJson = JSON.parse(JSON.stringify({ payloads }, bigIntStringify))
-        const promises = await mintApi.mint(payloadsJson, paymentHash)
+        const promises = await mintApi.mint(payloadsJson.payloads, paymentHash)
         if (promises.error) {
             throw new Error(promises.error)
         }
@@ -53,12 +53,12 @@ class Wallet {
 
     _constructProofs(promises, randomBlindingFactors, secrets) {
         return promises.map((p, i) => {
-            const C_ = new Point(BigInt(p["C'"].x), BigInt(p["C'"].y))
+            const C_ = Point.fromHex(p["C_"])
             const A = this.keys[p.amount]
-            const C = dhke.step3Bob(C_, randomBlindingFactors[i], new Point(BigInt(A.x), BigInt(A.y)))
+            const C = dhke.step3Bob(C_, randomBlindingFactors[i], Point.fromHex(A)).toHex()
             return {
                 amount: p.amount,
-                C: { x: C.x, y: C.y, secret: secrets[i] }
+                C: { C, secret: secrets[i] }
             }
         })
     }
