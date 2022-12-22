@@ -21,7 +21,7 @@ return A                                // all clients can see this
 ```
 
 ### 3. Mint (Alice)
-- if some conditions are met (invoice paied for example) then the `Mint` "signs": 
+- if some conditions are met (invoice paid for example) then the `Mint` "signs":
 ```
     C' = a * B' = a * (Y + r*G)
     return C'
@@ -30,7 +30,7 @@ return A                                // all clients can see this
 ### 4. Client (Bob)
 - stores this data. It represents eCash tokens
 - it proves the invoice was paid
-- if lost or stollen the tokens cannot be accessed anymore
+- if lost or stolen the tokens cannot be accessed anymore
 ```
     C = C' - r*A                        // remove the blinding factor
       = a * (Y + r*G) - r*A 
